@@ -1,0 +1,40 @@
+{
+    "name": "MBot",
+    "description": "a simple telegram message repeater userbot.",
+    "keywords": [
+        "userbot",
+        "telegram"
+    ],
+    "stack": "container",
+    "env": {
+        "API_ID": {
+            "description": "Enter Your Api ID Here."
+        },
+        "API_HASH": {
+            "description": "Enter Your Api Hash Here"
+        },
+        "BOT_TOKEN": {
+            "description": "Enter Pyrogram v2 String Session",
+            "required": true
+        },
+        "MONGO_URL": {
+            "description": "Enter Your Mongo DB URL",
+            "required": true
+        },
+        "OWNER_ID": {
+            "description": "Owner Id",
+            "required": true
+        }
+    },
+    "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "standard-2x"
+        }
+    },
+    "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ]
+}

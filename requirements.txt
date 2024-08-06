@@ -1,0 +1,5 @@
+motor==3.4.0
+python-dotenv
+pyrogram==2.0.106
+pyromod==3.1.6
+TgCrypto
