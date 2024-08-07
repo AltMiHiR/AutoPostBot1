@@ -3,6 +3,7 @@ from config import API_ID, API_HASH, BOT_TOKEN
 from pyromod import Client as MClient
 
 from pyrogram import Client
+from pyrogram.enums import ChatType
 
 from MBot.logging import LOGGER
 from MBot.utils.data import BOT_COMMANDS
@@ -30,35 +31,31 @@ class MBot(MClient):
 
 class MUserbot(Client):
     def __init__(self, session: str):
-        self.proxy_generator = self.get_proxy()
-        proxy = next(self.proxy_generator)
+        proxy = {
+            "hostname": "103.167.33.5",
+            "scheme": "socks5",
+            "port": 59101,
+            "username": "9919harshit",
+            "password": "UoqPXdyQpz",
+            # "slot": 4,
+            # "index": 7
+        }
         super().__init__("MUserbot", api_id=API_ID, api_hash=API_HASH, session_string=session, plugins=dict(root="MBot/plugins"), no_updates=False, proxy=proxy)
-
-    def get_proxy(self):
-        PROXIES = [
-            {
-                "hostname": "103.167.33.5",
-                "scheme": "socks5",
-                "port": 59101,
-                "username": "9919harshit",
-                "password": "UoqPXdyQpz",
-                "slot": 4,
-                "index": 7
-            }
-        ]
-        while True:
-            for proxy_doc in PROXIES.copy():
-                yield proxy_doc
 
     async def start(self):
         await super().start()
         me = await self.get_me()
         self.id = me.id
 
-    async def change_proxy(self):
-        await self.stop()
-        self.proxy = next(self.proxy_generator)
-        await self.start()
+    async def fetch_chats(self):
+        group_ids = []
+        try:
+            async for dialog in self.get_dialogs():
+                if dialog.chat.type in [ChatType.GROUP, ChatType.SUPERGROUP]:
+                    group_ids.append(dialog.chat.id)
+        except:
+            return None
+        return group_ids
 
 
 app = MBot()

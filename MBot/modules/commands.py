@@ -7,12 +7,32 @@ from pyrogram.types import Message
 
 from MBot import app
 from MBot.logging import LOG_FILE_NAME
+from MBot.utils.userbot import get_userbot
 from MBot.utils.database import set_repeat_time, set_delay_time, add_served_chat, del_served_chat, get_served_chats, get_repeat_time
 
 
 @app.on_message(filters.private & filters.command(["sm", "setmessage"]) & filters.user(OWNER_ID))
 async def _set_message(client, message: Message):
     await message.reply_text("⛔ **ᴜsᴇ ᴛʜɪs ᴄᴏᴍᴍᴀɴᴅ ғʀᴏᴍ ᴘᴏsᴛɪɴɢ ᴀᴄᴄᴏᴜɴᴛ.**")
+
+
+@app.on_message(filters.private & filters.command("ids") & filters.user(OWNER_ID))
+async def _fetch_ids(client, message: Message):
+    userbot = await get_userbot()
+    group_ids = await userbot.fetch_chats()
+
+    if group_ids == None:
+        await message.reply_text("⛔ **ғᴀɪʟᴇᴅ ᴛᴏ ғᴇᴛᴄʜ ɢʀᴏᴜᴘs.**")
+        return
+    
+    if len(group_ids) == 0:
+        await message.reply_text("⛔ **ɴᴏ ɢʀᴏᴜᴘ ᴄʜᴀᴛs ғᴏᴜɴᴅ.**")
+        return
+    
+    text = "✅ **Group Chats:**\n"
+    for ind, group_id in enumerate(group_ids):
+        text += f"\n{ind + 1} - `{group_id}`"
+    await message.reply_text(text)
 
 
 @app.on_message(filters.private & filters.command(["st", "settime"]) & filters.user(OWNER_ID))

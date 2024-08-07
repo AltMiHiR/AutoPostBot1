@@ -66,14 +66,6 @@ async def text_repeater():
             if sleep_times > 0:
                 await asyncio.sleep(sleep_times)
 
-        # count += 1
-        # if count % 90 == 0:
-        #     await userbot.change_proxy()
-        #     try:
-        #         await app.send_message(OWNER_ID, f"PROXY CHANGED: {userbot.proxy['hostname']}")
-        #     except:
-        #         LOGGER.info(f"PROXY CHANGED: {userbot.proxy['hostname']}")
-
 
 @app.on_message(filters.private & filters.command('posting') & filters.user(OWNER_ID))
 async def _posting(_, message: Message):

@@ -11,6 +11,7 @@ BOT_COMMANDS = [
     BotCommand("addchat", "Add Chat"),
     BotCommand("delchat", "Delete Chat"),
     BotCommand("gc", "Get Group Chats"),
+    BotCommand("ids", "Fetch Group Chats"),
     BotCommand("stats", "Get Stats"),
     BotCommand("logs", "Get Bot Logs"),
     BotCommand("help", "Help Command"),
