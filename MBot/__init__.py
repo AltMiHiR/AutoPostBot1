@@ -46,16 +46,17 @@ class MUserbot(Client):
         await super().start()
         me = await self.get_me()
         self.id = me.id
+        self.phone_number = f"+{me.phone_number}"
 
     async def fetch_chats(self):
-        group_ids = []
+        group_data = {}
         try:
             async for dialog in self.get_dialogs():
                 if dialog.chat.type in [ChatType.GROUP, ChatType.SUPERGROUP]:
-                    group_ids.append(dialog.chat.id)
+                    group_data[dialog.chat.id] = dialog.chat.title
         except:
             return None
-        return group_ids
+        return group_data
 
 
 app = MBot()

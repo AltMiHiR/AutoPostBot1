@@ -18,21 +18,35 @@ async def _set_message(client, message: Message):
 
 @app.on_message(filters.private & filters.command("ids") & filters.user(OWNER_ID))
 async def _fetch_ids(client, message: Message):
+    mx = await message.reply_text("🔄️ **ғᴇᴛᴄʜɪɴɢ ᴄʜᴀᴛs...**")
     userbot = await get_userbot()
-    group_ids = await userbot.fetch_chats()
+    group_data = await userbot.fetch_chats()
 
-    if group_ids == None:
+    if group_data == None:
         await message.reply_text("⛔ **ғᴀɪʟᴇᴅ ᴛᴏ ғᴇᴛᴄʜ ɢʀᴏᴜᴘs.**")
         return
     
-    if len(group_ids) == 0:
+    if len(group_data) == 0:
         await message.reply_text("⛔ **ɴᴏ ɢʀᴏᴜᴘ ᴄʜᴀᴛs ғᴏᴜɴᴅ.**")
         return
     
-    text = "✅ **Group Chats:**\n"
-    for ind, group_id in enumerate(group_ids):
-        text += f"\n{ind + 1} - `{group_id}`"
-    await message.reply_text(text)
+    text = "✅ Group Chats:"
+    for ind, (group_id, group_name) in enumerate(group_data.items()):
+        text += f"\n\n[{ind + 1}] {group_name} | {group_id}"
+
+    file_name = f"Chats{userbot.id}.txt"
+    with open(file_name, 'w') as gc_file:
+        gc_file.write(text)
+
+    try:
+        await mx.delete()
+    except:
+        pass
+    await message.reply_document(file_name, caption=f"✅ **ɢʀᴏᴜᴘ ᴄʜᴀᴛs ғᴇᴛᴄʜᴇᴅ.**\n\nAccount = {userbot.phone_number}", file_name="Groups.txt")
+    try:
+        os.remove(file_name)
+    except:
+        pass
 
 
 @app.on_message(filters.private & filters.command(["st", "settime"]) & filters.user(OWNER_ID))
