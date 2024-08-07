@@ -1,10 +1,12 @@
 import asyncio
 
+from time import time
+
 from config import OWNER_ID
 
 from pyrogram import filters
 from pyrogram.types import Message
-from pyrogram.errors import FloodWait, UserDeactivatedBan
+from pyrogram.errors import FloodWait, UserDeactivatedBan, SlowmodeWait
 
 from MBot import BOT_ID, app
 from MBot.logging import LOGGER
@@ -37,6 +39,7 @@ async def text_repeater():
         elif post_msg_id == 0:
             await asyncio.sleep(speed)
         else:
+            t1 = time()
             for chat_id in chats:
                 try:
                     await userbot.copy_message(chat_id, "me", post_msg_id)
@@ -46,6 +49,8 @@ async def text_repeater():
                         await userbot.copy_message(chat_id, "me", post_msg_id)
                     except:
                         pass
+                except SlowmodeWait:
+                    continue
                 except UserDeactivatedBan:
                     try:
                         await app.send_message(OWNER_ID, "Account is Banned.")
@@ -54,10 +59,12 @@ async def text_repeater():
                     return
                 except Exception as e:
                     continue
-                if group_delay != 0:
+                if group_delay > 0:
                     await asyncio.sleep(group_delay)
-            sleep_times = speed - (group_delay * len(chats))
-            await asyncio.sleep(sleep_times)
+            t2 = time()
+            sleep_times = speed - (t2 - t1)
+            if sleep_times > 0:
+                await asyncio.sleep(sleep_times)
 
         # count += 1
         # if count % 90 == 0:

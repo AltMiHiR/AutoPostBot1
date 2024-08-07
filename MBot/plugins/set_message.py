@@ -11,7 +11,9 @@ async def set_message_ids(client: MUserbot, message: Message):
     if r_message:
         if message.chat.id != client.id:
             r_message = await r_message.copy("me")
-        set = await set_post(r_message.id)
+        is_set = await set_post(r_message.id)
+        if is_set:
+            await message.delete()
     else:
         try:
             value = message.text.split(" ", 2)[1]
@@ -19,8 +21,8 @@ async def set_message_ids(client: MUserbot, message: Message):
             await message.reply_text("Please Reply To a Message")
             return
         if value == "0":
-            set = await set_post(0)
-            if set:
+            is_set = await set_post(0)
+            if is_set:
                 await message.reply_text("Successfully Reset")
                 return
         else:

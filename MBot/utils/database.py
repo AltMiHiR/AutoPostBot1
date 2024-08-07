@@ -161,10 +161,10 @@ async def get_allowed_users() -> list:
 
 async def get_delay_time() -> int:
     delay = await delaydb.find_one()
-    if not delay:
-        return 0
-    get_delay = delay["delay_timer"]
-    return int(get_delay)
+    if delay:
+        get_delay = delay["delay_timer"]
+        return int(get_delay)
+    return 1
 
 
 async def set_delay_time(number: int) -> bool:
